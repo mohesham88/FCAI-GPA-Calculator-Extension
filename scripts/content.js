@@ -31,21 +31,20 @@ function calculateGPA(courses){
     "B+" : 3.3,
     "B" : 3.0,
     "C+" : 2.7,
-    "C" : 2.3,
-    "D+" : 2.0,
-    "D" : 1.7,
+    "C" : 2.4,
+    "D+" : 2.2,
+    "D" : 2.0,
     "F" : 0,
   }
   courses.forEach(course => {
     if(course.grade){
-      totalGrade += POINTS[course.grade] * course.hours;
+      totalGrade += (POINTS[course.grade] * course.hours);
+      // console.log(`${course.hours} ${course.grade}`);
+      console.log(`${POINTS[course.grade]} * ${course.hours} `);
       totalHour += course.hours;
-      /* console.log(totalGrade)
-      console.log(totalHour)
-      console.log(POINTS[course.grade]) */
     }
   });
-
+  console.log(`GPA : ${totalGrade} / ${totalHour}`);
   return totalGrade/totalHour;
 }
 
@@ -64,7 +63,7 @@ function main(){
     const courses = getCourseFromDOM(tableRows);
 
     const gpa = calculateGPA(courses);    
-    console.log(gpa)
+    console.log(`gpa = ${gpa}`)
     
     clearInterval(hadnle)
 
