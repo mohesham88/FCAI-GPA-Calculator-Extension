@@ -5,7 +5,7 @@
   "version" : "1.0",
   "action" : {
     "default_popup" : "popup/popup.html",
-    "default_icon" : "images/FCAI_logo.jpg"
+    "default_icon" : "images/FCAI_logo.png"
   },
   "content_scripts": [
     {
