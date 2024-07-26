@@ -15,3 +15,16 @@ git clone https://github.com/mohesham88/FCAI-GPA-Calculator-Extension.git
 ## 3. load unpacked extension
 Click on the button on the top left of the page that says "Load unpacked".
 Then select the folder you cloned (the folder contains the manifest.json file.).
+
+# GPA Calculation
+| Grade| Points  |
+| ---- | ------- |
+| A+   | 4       |
+| A    | 3.7     |
+| B+   | 3.3     |
+| B    | 3.0     |
+| C+   | 2.7     |
+| C    | 2.4     |
+| D+   | 2.2     |
+| D    | 2       |
+| F    | 0       |
