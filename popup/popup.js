@@ -13,37 +13,43 @@ chrome.runtime.onMessage.addListener(
 }); */
 
 
+/* (async () => {
+  
+  const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+  const [{ result }] = await chrome.scripting.executeScript(({
+    target: { tabId: tab.id }, 
+    func: () => {
+      console.log(document.querySelector('table'))
+    }
+  }));
+})();
+ */
 
 
-document.addEventListener("DOMContentLoaded", async function() {
+document.addEventListener("DOMContentLoaded",  function() {
   const gpaDiv = document.querySelector('.gpa-div');
   const gpaText = document.querySelector('#gpa');
-  const storedGpa = await chrome.storage.local.get('gpa');
+  
+  chrome.runtime.onMessage.addListener(/* async */ (request, sender, sendResponse) => {
+    if(request.from === 'background' && request.to === 'popup'){
+        const gpa = request.gpa;
+        console.log(`request: ${gpa}`);
+        console.log(request);
+        if (gpa) {
+          gpaDiv.style = "display:block;"
+          gpaText.textContent = gpa.toFixed(2);
+        }
 
-  console.log(storedGpa)
+        sendResponse({
+          "success" : true,
+        })
+    }
+    
+  });
 
   
-  if (storedGpa) {
-    const gpa = storedGpa.gpa;
-    gpaDiv.style.display = "block";
-    gpaText.textContent = gpa.toFixed(2);
-  }
-
-
-
-  /* chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
-    const gpa = request.gpa;
-    console.log(`request: ${gpa}`);
-    if (gpa) {
-      gpaDiv.style.display = "block";
-      gpaText.textContent = gpa.toFixed(2);
-    }
-    sendResponse({
-      data : "GPA received"
-    })
-    return true;
-  }); */
 })
+
 
 
 

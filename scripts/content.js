@@ -54,7 +54,7 @@ function calculateGPA(courses){
 
 
 var hadnle = setInterval( main , 1000);
-function main(){
+async function main(){
 
   const table = document.getElementsByClassName('table-striped');
   if(table[0] && table[0].children){
@@ -67,11 +67,7 @@ function main(){
     
     clearInterval(hadnle)
 
-   /*  chrome.runtime.sendMessage({
-      gpa,
-    }) */
-
-    chrome.storage.local.set({gpa})
+    await chrome.runtime.sendMessage({from : 'content', to : "popup",gpa});
   }
 
 }
