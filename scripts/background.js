@@ -9,6 +9,10 @@ function sendMessageToPopup(message) {
   });
 }
 
+function sendToPopup(message){
+  chrome.runtime.sendMessage({ from: 'background', to: 'popup', gpa: message.gpa });
+}
+
 
 
 chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
@@ -16,9 +20,17 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
 
     inter = setInterval(sendMessageToPopup , 1000 , message , inter);
 
-  }/*  else if (message.from === 'popup' && message.to === 'content') {
+    sendResponse({success : "true"})
+
+  } else if (message.from === 'popup' && message.to === 'content') {
     chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
-      chrome.tabs.sendMessage(tabs[0].id, {from: 'background', to: 'content', data: message.data});
+      chrome.tabs.sendMessage(tabs[0].id, {from: 'background', to: 'content'} , (response) => {
+          console.log(response);
+          const gpa = response.gpa;
+          // sendResponse({gpa})
+          sendToPopup(response);
+      });
     });
-  } */
+  }
+  return true;
 });

@@ -26,32 +26,46 @@ chrome.runtime.onMessage.addListener(
  */
 
 
-document.addEventListener("DOMContentLoaded",  function() {
+function addGPAToDOM(gpa){
   const gpaDiv = document.querySelector('.gpa-div');
   const gpaText = document.querySelector('#gpa');
-  
-  chrome.runtime.onMessage.addListener(/* async */ (request, sender, sendResponse) => {
-    if(request.from === 'background' && request.to === 'popup'){
-        const gpa = request.gpa;
-        console.log(`request: ${gpa}`);
-        console.log(request);
-        if (gpa) {
-          gpaDiv.style = "display:block;"
-          gpaText.textContent = gpa.toFixed(2);
-        }
-
-        sendResponse({
-          "success" : true,
-        })
+  console.log(`request: ${gpa}`);
+    if (gpa) {
+      gpaDiv.style = "display:block;"
+      gpaText.textContent = gpa.toFixed(2);
     }
-    
-  });
+
+}
+
+
+document.addEventListener("DOMContentLoaded",  async function() {
+  
+
+
+
+
+  await chrome.runtime.sendMessage({from : 'popup', to : "content"});  
+
 
   
 })
 
 
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if(request.from === 'background' && request.to === 'popup'){
+      const gpa = request.gpa;
+      addGPAToDOM(gpa);
+  }
+})
 
+/* chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
+  if(request.from === 'background' && request.to === 'popup'){
+      const gpa = request.gpa;
+      
+  }
+  
+});
+ */
 
 
 

@@ -53,7 +53,7 @@ function calculateGPA(courses){
 
 
 
-var hadnle = setInterval( main , 1000);
+// var hadnle = setInterval( main , 1000);
 async function main(){
 
   const table = document.getElementsByClassName('table-striped');
@@ -65,12 +65,25 @@ async function main(){
     const gpa = calculateGPA(courses);    
     console.log(`gpa = ${gpa}`)
     
-    clearInterval(hadnle)
+    // clearInterval(hadnle)
 
-    await chrome.runtime.sendMessage({from : 'content', to : "popup",gpa});
+    return gpa;
+    /* await chrome.runtime.sendMessage({from : 'content', to : "popup",gpa}); */
   }
 
 }
+
+
+chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
+  if(request.from === 'background' && request.to === 'content'){
+      const gpa = await main();
+
+      sendResponse({gpa});
+  }
+
+  return true;
+  
+});
 
 
 
