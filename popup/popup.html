@@ -1,10 +1,76 @@
-<html>
-  <body style="width: 200px;">
-    <h1 style="text-align: center;">FCAI GPA</h1>
-    <div style="display: none;" class="gpa-div">
-      <p >Your GPA is <span id="gpa"></span></p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FCAI GPA</title>
+    <style>
+        body {
+            width: 250px;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+            color: #333;
+            text-align: center;
+        }
+        
+        .nav{
+          background-color: #192bd1;
+          padding: 10px 20px;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        }
+
+        .nav img{
+          width: 40px;
+        }
+
+        h1 {
+            color: white;
+            margin: 0;
+            padding: 10px;
+            font-size: 1.5em;
+        }
+        .gpa-div {
+            display: none;
+            padding: 15px;
+            background-color: #ffffff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+        }
+        .gpa-div p {
+            margin: 0;
+            font-size: 1.2em;
+          }
+          .gpa-div #gpa {
+            color: #4CAF50;
+            font-weight: bold;
+            font-size: 37px;
+        }
+        .error {
+            display: none;
+            padding: 15px;
+            background-color: #ffdddd;
+            color: #d8000c;
+            border: 1px solid #d8000c;
+            border-radius: 5px;
+        }
+
+        
+    </style>
+</head>
+<body>
+    <div class="nav">
+      <img src="../images/FCAI_logo.png" alt="FCAI_LOGO">
+      <h1>FCAI GPA</h1>
     </div>
-    
+    <div class="gpa-div">
+        <p>Your GPA is</p>
+        <p id="gpa"></p>
+    </div>
+    <div class="error"></div>
     <script src="popup.js"></script>
-  </body>
+</body>
 </html>

@@ -1,36 +1,50 @@
-let inter = null;
+let GPA = null;
+let popupStatus = 'inactive';
 
-function sendMessageToPopup(message) {
-  chrome.runtime.sendMessage({ from: 'background', to: 'popup', gpa: message.gpa }, function(response) {
-    if (response && response.success) {
-      clearInterval(inter);
-      inter = null; // Clear the interval and reset the variable
-    }
+
+function sendToPopup(gpa){
+  chrome.runtime.sendMessage({ from: 'background', to: 'popup', gpa } , (response) => {
+    if (chrome.runtime.lastError) {
+      // Handle the error silently
+      console.log('Runtime error:', chrome.runtime.lastError.message);
+      popupStatus = 'inactive';
+      return;
+  }
   });
 }
-
-function sendToPopup(message){
-  chrome.runtime.sendMessage({ from: 'background', to: 'popup', gpa: message.gpa });
-}
-
-
 
 chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
   if (message.from === 'content' && message.to === 'popup') {
 
-    inter = setInterval(sendMessageToPopup , 1000 , message , inter);
+    GPA = message.gpa;
+    console.log(popupStatus)
+    if(popupStatus === 'active'){
+      sendToPopup(message.gpa); 
+      popupStatus = 'inactive';
+    }
 
-    sendResponse({success : "true"})
+  } else if (message.from === 'popup' && message.to === 'background') {
+    
+    if(GPA){
+      sendResponse({gpa : GPA});
 
-  } else if (message.from === 'popup' && message.to === 'content') {
-    chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
-      chrome.tabs.sendMessage(tabs[0].id, {from: 'background', to: 'content'} , (response) => {
-          console.log(response);
-          const gpa = response.gpa;
-          // sendResponse({gpa})
-          sendToPopup(response);
-      });
-    });
+    }else {
+
+      sendResponse({message : "not calculated yet"}, function(response) {
+        var lastError = chrome.runtime.lastError;
+        console.log(lastError)
+        if (lastError) {
+            console.log(lastError.message);
+            // 'Could not establish connection. Receiving end does not exist.'
+            return;
+        }
+        
+    })
+
+      
+    }
+    
+    popupStatus = 'active';
   }
   return true;
 });

@@ -1,31 +1,4 @@
 
-/* 
-const gpaDiv = document.querySelector('.gpa-div');
-const gpa = document.querySelector('.gpa')
-chrome.runtime.onMessage.addListener(
-  function(request, sender, sendResponse) {
-    if (gpa){
-      const gpa = request.gpa;
-      console.log(gpa);
-      gpaDiv.style = "display:block";
-      gpa.textContent = gpa;
-    }
-}); */
-
-
-/* (async () => {
-  
-  const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-  const [{ result }] = await chrome.scripting.executeScript(({
-    target: { tabId: tab.id }, 
-    func: () => {
-      console.log(document.querySelector('table'))
-    }
-  }));
-})();
- */
-
-
 function addGPAToDOM(gpa){
   const gpaDiv = document.querySelector('.gpa-div');
   const gpaText = document.querySelector('#gpa');
@@ -37,54 +10,52 @@ function addGPAToDOM(gpa){
 
 }
 
+async function getCurrentTab() {
+  let queryOptions = { active: true, lastFocusedWindow: true };
+  // `tab` will either be a `tabs.Tab` instance or `undefined`.
+  let [tab] = await chrome.tabs.query(queryOptions);
+  return tab;
+}
+
+
+
+
+
+
 
 document.addEventListener("DOMContentLoaded",  async function() {
-  
+
+  const url = 'http://193.227.14.58/#/courses-per-students';
+
+  const currentTab = await getCurrentTab();
+  console.log(currentTab.url)
+  if(currentTab.url === url){
+
+    // handshake with the worker thread to let it know that the popup is active
+    await chrome.runtime.sendMessage({from : 'popup', to : "background", "message" : "handshake"}, function (response) {
+      console.log(response)
+      if(response.gpa){
+        addGPAToDOM(response.gpa)
+      }
+    });  
+
+  }else {
+    const error = document.querySelector('.error');
+    error.style.display = 'block';
+    error.textContent = `Please go to the FCAI grades page and signin for the extension to work\n ${url}`;
+  }
 
 
-
-
-  await chrome.runtime.sendMessage({from : 'popup', to : "content"});  
-
-
-  
 })
 
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if(request.from === 'background' && request.to === 'popup'){
+    console.log(request);
+    if(request && request.gpa){
       const gpa = request.gpa;
       addGPAToDOM(gpa);
+    }
   }
+
 })
-
-/* chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
-  if(request.from === 'background' && request.to === 'popup'){
-      const gpa = request.gpa;
-      
-  }
-  
-});
- */
-
-
-
-/* async function getCurrentTab() {
-  let queryOptions = { active: true };
-  let [tab] = await chrome.tabs.query(queryOptions);
-  return tab;
-};
-
-function injectContentScript(tab) {
-  const { id, url } = tab;
-  chrome.scripting.executeScript(
-      {
-          target: { tabId: id, allFrames: true },
-          files: ['scripts/content.js']
-      }
-  );
-};
-
-getCurrentTab().then((tab) => {
-  injectContentScript(tab);
-}); */
