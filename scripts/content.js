@@ -76,6 +76,8 @@ function checkURL(){
   const urls = [
     'http://193.227.14.58/#/courses-per-students',
     'http://193.227.14.58/#/courses-per-students/',
+    'http://newecom.fci-cu.edu.eg/#/courses-per-students',
+    'http://newecom.fci-cu.edu.eg/#/courses-per-students/'
   ]
 
   if(urls.indexOf(url) !== -1){
@@ -89,8 +91,8 @@ function main(){
   
   const tables = document.querySelectorAll('table')
   if( checkURL() && tables.length  > 1){
-    const secondTable = tables[1];
-    const rows = secondTable.querySelectorAll('tbody tr')
+    const lastTable = tables[tables.length - 1];
+    const rows = lastTable.querySelectorAll('tbody tr')
     const courses = getCourseFromDOM(rows);
     const gpa = calculateGPA(courses);
     sendGpaToWorker(gpa);

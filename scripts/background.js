@@ -27,9 +27,9 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
     
     if(GPA){
       sendResponse({gpa : GPA});
-
+  
     }else {
-
+  
       sendResponse({message : "not calculated yet"}, function(response) {
         var lastError = chrome.runtime.lastError;
         console.log(lastError)
@@ -40,11 +40,37 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
         }
         
     })
-
-      
     }
     
     popupStatus = 'active';
+    
   }
   return true;
 });
+
+
+
+/* chrome.action.onClicked.addListener(function() {
+  console.log('extension clicked')
+  if(GPA){
+    sendResponse({gpa : GPA});
+
+  }else {
+
+    sendResponse({message : "not calculated yet"}, function(response) {
+      var lastError = chrome.runtime.lastError;
+      console.log(lastError)
+      if (lastError) {
+          console.log(lastError.message);
+          // 'Could not establish connection. Receiving end does not exist.'
+          return;
+      }
+      
+  })
+
+    
+  }
+  
+  popupStatus = 'active';
+
+}) */

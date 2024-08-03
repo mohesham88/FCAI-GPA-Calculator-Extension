@@ -25,11 +25,16 @@ async function getCurrentTab() {
 
 document.addEventListener("DOMContentLoaded",  async function() {
 
-  const url = 'http://193.227.14.58/#/courses-per-students';
+  const urls = [
+    'http://193.227.14.58/#/courses-per-students',
+    'http://193.227.14.58/#/courses-per-students/',
+    'http://newecom.fci-cu.edu.eg/#/courses-per-students',
+    'http://newecom.fci-cu.edu.eg/#/courses-per-students/'
+  ]
 
   const currentTab = await getCurrentTab();
   console.log(currentTab.url)
-  if(currentTab.url === url){
+  if(urls.indexOf(currentTab.url) !== -1){
 
     // handshake with the worker thread to let it know that the popup is active
     await chrome.runtime.sendMessage({from : 'popup', to : "background", "message" : "handshake"}, function (response) {
@@ -42,7 +47,7 @@ document.addEventListener("DOMContentLoaded",  async function() {
   }else {
     const error = document.querySelector('.error');
     error.style.display = 'block';
-    error.textContent = `Please go to the FCAI grades page and signin for the extension to work\n ${url}`;
+    error.textContent = `Please go to the FCAI grades page and signin for the extension to work\n ${urls[0]}`;
   }
 
 

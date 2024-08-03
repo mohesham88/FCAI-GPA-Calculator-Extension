@@ -17,7 +17,8 @@
     {
       "js": ["scripts/content.js"],
       "matches": [
-        "http://193.227.14.58/*"
+        "http://193.227.14.58/*",
+        "http://newecom.fci-cu.edu.eg/*"
       ],
       
       "run_at" : "document_idle"
