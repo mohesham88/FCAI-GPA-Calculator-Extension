@@ -1,10 +1,10 @@
 {
   "manifest_version": 3,
-  "name" : "FCAI GPA Calculator",
-  "description" : "This extension calculates the GPA of FCAI students",
-  "version" : "1.0",
-  "action" : {
-    "default_popup" : "popup/popup.html"
+  "name": "FCAI GPA Calculator",
+  "description": "This extension calculates the GPA of FCAI students",
+  "version": "1.0",
+  "action": {
+    "default_popup": "popup/popup.html"
   },
   "icons": {
     "16": "/images/icon16.png",
@@ -12,16 +12,13 @@
     "48": "/images/icon48.png",
     "128": "/images/icon128.png"
   },
-  
+
   "content_scripts": [
     {
       "js": ["scripts/content.js"],
-      "matches": [
-        "http://193.227.14.58/*",
-        "http://newecom.fci-cu.edu.eg/*"
-      ],
-      
-      "run_at" : "document_idle"
+      "matches": ["http://193.227.14.58/*", "http://newecom.fci-cu.edu.eg/*"],
+
+      "run_at": "document_idle"
     }
   ],
   "permissions": [
@@ -29,11 +26,17 @@
     "tabs",
     "scripting",
     "storage",
-    "webNavigation"
+    "webNavigation",
+    "webRequest"
   ],
   "host_permissions": ["http://*/*"],
-  "background" : {
-    "service_worker" : "scripts/background.js"
-  }
-  
+  "background": {
+    "service_worker": "scripts/background.js"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["scripts/inject.js"],
+      "matches": ["<all_urls>"]
+    }
+  ]
 }
